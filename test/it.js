@@ -8,7 +8,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('Integration test', function() {
-    it('...', (done) => {
+    it('test1', (done) => {
         chai.request(server)
             .post("/calculate")
             .type('application/json')
