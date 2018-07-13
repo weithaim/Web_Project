@@ -8,7 +8,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.post('/calculate', (req, res) => {
-    let calcObj = JSON.parse(calculateNextState(req.body.calculatorState, req.body.input));
+    let calculatorState = req.body.calculatorState ? JSON.stringify(req.body.calculatorState) : null;
+    let calcObj = JSON.parse(calculateNextState(calculatorState, req.body.input));
     res.json(calcObj);
 });
 
