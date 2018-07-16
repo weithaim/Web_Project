@@ -52,6 +52,11 @@ describe('calculator test', function() {
         expect(JSON.parse(currState).display).to.equal("8");
     });
 
+    it('display: "8" plus', () => {
+        currState = calculateNextState(currState, "+");
+        expect(JSON.parse(currState).display).to.equal("8");
+    });
+
     it('display: "8" divide', () => {
         currState = calculateNextState(currState, "/");
         expect(JSON.parse(currState).display).to.equal("8");
@@ -127,5 +132,9 @@ describe('calculator test', function() {
         expect(JSON.parse(currState).display).to.equal("27.75");
     });
 
+    it('display: "27.75" ("=" twice)', () => {
+        currState = calculateNextState(currState, "=");
+        expect(JSON.parse(currState).display).to.equal("27.75");
+    });
 
 });

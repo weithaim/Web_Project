@@ -6,7 +6,11 @@ function calculateNextState(jsonState, input) {
             calc.display = calc.expression;
             calc.clearExpression = true;
         } else {
-            calc.expression = eval(calc.expression) + input;
+            if (calc.clearDisplay && !calc.clearExpression) {
+                calc.expression = eval(calc.expression.slice(0, -1)) + input;
+            } else {
+                calc.expression = eval(calc.expression) + input;
+            }
             calc.clearExpression = false;
         }
         calc.clearDisplay = true;

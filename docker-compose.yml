@@ -23,7 +23,7 @@ services:
 
     environment:
       REDIS_ADDRESS: redis:6379
-      SESSION_SECRET: 'lalala'
+      SESSION_SECRET: 'YuvalHaim'
       USER_SERVICE_ADDRESS: user-service:80
       FRONTEND_ADDRESS: currency-frontend:80
       CALCULATOR_ADDRESS: currency-calculator:3000
