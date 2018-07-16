@@ -16,7 +16,7 @@ function testConnector(input) {
         .send({calculatorState: currState, input: input});
 }
 
-describe('Integration test', function() {
+describe('Integration Test:', function() {
     describe('init connection test', function () {
         before(function () {
             currState = null;
@@ -54,7 +54,7 @@ describe('Integration test', function() {
                 });
         });
 
-        it('display 1', function (done) {
+        it('display: 1', function (done) {
             testConnector("+")
                 .end((err, res) => {
                     expect(err).to.be.null;

@@ -6,7 +6,7 @@ const calculateNextState = require('../calc.js');
 
 let currState = null;
 
-describe('calculator test', function() {
+describe('Unit Test: calculateNextState', function() {
     it('display: "1"', () => {
         currState = calculateNextState(currState, "1");
         expect(JSON.parse(currState).display).to.equal("1");
