@@ -2,14 +2,16 @@ function calculateNextState(jsonState, input) {
     let calc = jsonState ? JSON.parse(jsonState) : {expression: "", display: ""};
     if (isNaN(input)) {
         if (input === "=") {
-            calc.expression = eval(calc.expression) + "";
+            calc.expression = calc.expression ? eval(calc.expression) + "" : "";
             calc.display = calc.expression;
             calc.clearExpression = true;
+        } else if (!calc.expression && (input === "/" || input === "*")) {
+            return JSON.stringify(calc);
         } else {
             if (calc.clearDisplay && !calc.clearExpression) {
-                calc.expression = eval(calc.expression.slice(0, -1)) + input;
+                calc.expression = calc.expression ? eval(calc.expression.slice(0, -1)) + input : input;
             } else {
-                calc.expression = eval(calc.expression) + input;
+                calc.expression = calc.expression ? eval(calc.expression) + input : input;
             }
             calc.clearExpression = false;
         }
