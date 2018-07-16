@@ -12,7 +12,7 @@ Submitted by:
 	3. mocha
 	4. chai
 	5. chai-http
-3. Please make sure you have 'docker' installed on your machine.
+3. Please make sure you have 'docker' and 'docker-compose' are installed on your machine.
 
 ### Instructions:
 1. Calculator Function implemented in 'calc.js'.
