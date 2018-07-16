@@ -1,36 +1,157 @@
 'use strict';
-const app = require('../server.js');
-const server = 'http://localhost:3000';
+const server = require('../server.js');
+const serverAddr = 'http://localhost:3000';
 const {describe, it} = require('mocha');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
+let currState = null;
+
+function testHelper(input) {
+    return chai.request(serverAddr)
+        .post("/calculate")
+        .type('application/json')
+        .send({calculatorState: currState, input: input});
+}
+
 describe('Integration test', function() {
-    it('test1', (done) => {
-        chai.request(server)
-            .post("/calculate")
-            .type('application/json')
-            .send({calculatorState: null, input: "1"})
-            .end((err, res) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                expect(res.body.display).to.equal("1");
-                done();
-            });
+    describe('init connection test', function () {
+        before(function () {
+            currState = null;
+        });
+
+        it('connection test', function (done) {
+            testHelper("5")
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("5");
+                    expect(currState.expression).to.equal("5");
+                    expect(currState.clearDisplay && currState.clearExpression).to.be.false;
+                    done();
+                });
+        });
     });
 
-    it('test2', (done) => {
-        chai.request(server)
-            .post("/calculate")
-            .type('application/json')
-            .send({calculatorState: {expression: "1", display: "1", clearDisplay: false, clearExpression: false}, input: "1"})
-            .end((err, res) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                expect(res.body.display).to.equal("11");
-                done();
-            });
+    describe('exercise test', function() {
+        before(function () {
+            currState = null;
+        });
+
+        it('display: 1', function (done) {
+            testHelper("1")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("1");
+                    expect(currState.expression).to.equal("1");
+                    expect(currState.clearDisplay && currState.clearExpression).to.be.false;
+                    done();
+                });
+        });
+
+        it('display 1', function (done) {
+            testHelper("+")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("1");
+                    expect(currState.expression).to.equal("1+");
+                    expect(currState.clearExpression).to.be.false;
+                    expect(currState.clearDisplay).to.be.true;
+                    done();
+                });
+        });
+
+        it('display: 5', function (done) {
+            testHelper("5")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("5");
+                    expect(currState.expression).to.equal("1+5");
+                    expect(currState.clearDisplay && currState.clearExpression).to.be.false;
+                    done();
+                });
+        });
+
+        it('display: 6', function (done) {
+            testHelper("=")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("6");
+                    expect(currState.expression).to.equal("6");
+                    expect(currState.clearDisplay && currState.clearExpression).to.be.true;
+                    done();
+                });
+        });
+
+        it('display: 6 mul', function (done) {
+            testHelper("*")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("6");
+                    expect(currState.expression).to.equal("6*");
+                    expect(currState.clearExpression).to.be.false;
+                    expect(currState.clearDisplay).to.be.true;
+                    done();
+                });
+        });
+
+        it('display: 1 (part of 10)', function (done) {
+            testHelper("1")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("1");
+                    expect(currState.expression).to.equal("6*1");
+                    expect(currState.clearExpression).to.be.false;
+                    expect(currState.clearDisplay).to.be.false;
+                    done();
+                });
+        });
+
+        it('display: 10', function (done) {
+            testHelper("0")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("10");
+                    expect(currState.expression).to.equal("6*10");
+                    expect(currState.clearExpression).to.be.false;
+                    expect(currState.clearDisplay).to.be.false;
+                    done();
+                });
+        });
+
+        it('display: 10 (part of 10)', function (done) {
+            testHelper("=")
+                .end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    currState = res.body;
+                    expect(currState.display).to.equal("60");
+                    expect(currState.expression).to.equal("60");
+                    expect(currState.clearExpression).to.be.true;
+                    expect(currState.clearDisplay).to.be.true;
+                    done();
+                });
+        });
+    });
+
+    after(function () {
+        server.close();
     })
 });

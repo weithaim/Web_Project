@@ -14,6 +14,6 @@ app.post('/calculate', (req, res) => {
 });
 
 //listen to port
-app.listen(3000, () => console.log('listening on port 3000'));
+let server = app.listen(3000, () => console.log('listening on port 3000'));
 
-module.exports = app;
+module.exports = server;
