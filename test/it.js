@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 let currState = null;
 
-function testHelper(input) {
+function testConnector(input) {
     return chai.request(serverAddr)
         .post("/calculate")
         .type('application/json')
@@ -23,7 +23,7 @@ describe('Integration test', function() {
         });
 
         it('connection test', function (done) {
-            testHelper("5")
+            testConnector("5")
                 .end(function (err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -42,7 +42,7 @@ describe('Integration test', function() {
         });
 
         it('display: 1', function (done) {
-            testHelper("1")
+            testConnector("1")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -55,7 +55,7 @@ describe('Integration test', function() {
         });
 
         it('display 1', function (done) {
-            testHelper("+")
+            testConnector("+")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -69,7 +69,7 @@ describe('Integration test', function() {
         });
 
         it('display: 5', function (done) {
-            testHelper("5")
+            testConnector("5")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -82,7 +82,7 @@ describe('Integration test', function() {
         });
 
         it('display: 6', function (done) {
-            testHelper("=")
+            testConnector("=")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -95,7 +95,7 @@ describe('Integration test', function() {
         });
 
         it('display: 6 mul', function (done) {
-            testHelper("*")
+            testConnector("*")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -109,7 +109,7 @@ describe('Integration test', function() {
         });
 
         it('display: 1 (part of 10)', function (done) {
-            testHelper("1")
+            testConnector("1")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -123,7 +123,7 @@ describe('Integration test', function() {
         });
 
         it('display: 10', function (done) {
-            testHelper("0")
+            testConnector("0")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
@@ -137,7 +137,7 @@ describe('Integration test', function() {
         });
 
         it('display: 10 (part of 10)', function (done) {
-            testHelper("=")
+            testConnector("=")
                 .end((err, res) => {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
